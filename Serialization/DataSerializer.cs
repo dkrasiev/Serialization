@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.Text.Json;
 
 namespace Serialization
 {
@@ -21,14 +23,23 @@ namespace Serialization
             }
         }
 
-        public void XMLSerialize(object data, string filePath)
+        public void XmlSerialize(object data, string filePath)
         {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
+            if (File.Exists(filePath)) File.Delete(filePath);
 
+            TextWriter writer = new StreamWriter(filePath);
+            xmlSerializer.Serialize(writer, data);
+            writer.Close();
         }
 
-        public void JSONSerialize(object data, string filePath)
+        public void JsonSerialize(object data, string filePath)
         {
+            if (File.Exists(filePath)) File.Delete(filePath);
 
+            TextWriter writer = new StreamWriter(filePath);
+            writer.Write(data);
+            writer.Close();
         }
     }
 }

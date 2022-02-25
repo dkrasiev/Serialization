@@ -36,13 +36,14 @@ namespace Serialization
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == true)
             {
-                string filePath = ofd.FileName;
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                LoadedFile.Text = ofd.FileName;
+                using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
                 {
                     StreamReader sr = new StreamReader(fs);
                     _data = sr.ReadToEnd();
+                    LoadedData.Text = _data.ToString();
                 }
-                MessageBox.Show("Выбран файл: " + filePath, "Succes");
+                MessageBox.Show("Выбран файл: " + ofd.FileName, "Succes");
             }
             else
             {
@@ -70,7 +71,7 @@ namespace Serialization
 
             if (ofd.ShowDialog() == true)
             {
-                _serializer.XMLSerialize(_data, ofd.FileName);
+                _serializer.XmlSerialize(_data, ofd.FileName);
             }
             else
             {
@@ -84,7 +85,7 @@ namespace Serialization
 
             if (ofd.ShowDialog() == true)
             {
-                _serializer.JSONSerialize(_data, ofd.FileName);
+                _serializer.JsonSerialize(_data, ofd.FileName);
             }
             else
             {
