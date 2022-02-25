@@ -7,11 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Text.Json;
+using System.Text.Unicode;
+using System.Text.Encodings.Web;
 
 namespace Serialization
 {
     internal class DataSerializer
     {
+        private static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions()
+        {
+            AllowTrailingCommas = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All), // Вот эта строка Вам поможет с кодировкой
+            WriteIndented = true
+        };
+
         public void BinarySerialize(object data, string filePath)
         {
             BinaryFormatter bf = new();
@@ -23,9 +33,9 @@ namespace Serialization
             }
         }
 
-        public void XmlSerialize(object data, string filePath)
+        public void XmlSerialize(Type dataType, object data, string filePath)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Object));
+            XmlSerializer xmlSerializer = new XmlSerializer(dataType);
             if (File.Exists(filePath)) File.Delete(filePath);
 
             TextWriter writer = new StreamWriter(filePath);
@@ -33,12 +43,12 @@ namespace Serialization
             writer.Close();
         }
 
-        public void JsonSerialize(object data, string filePath)
+        public void JsonSerialize(Type dataType, object data, string filePath)
         {
             if (File.Exists(filePath)) File.Delete(filePath);
 
             TextWriter writer = new StreamWriter(filePath);
-            writer.Write(data);
+            writer.Write(JsonSerializer.Serialize(data, jsonOptions));
             writer.Close();
         }
     }
