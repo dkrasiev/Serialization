@@ -1,0 +1,18 @@
+﻿<Window x:Class="Serialization.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Serialization"
+        mc:Ignorable="d"
+        Title="Serialization" Height="450" Width="800">
+    <Grid>
+        <StackPanel x:Name="Buttons">
+            <Button x:Name="Load" Content="Load" Click="Load_Click"/>
+            <Button x:Name="BinarySerialization" Content="Binary" Click="BinarySerialization_Click"/>
+            <Button x:Name="XMLSerialization" Content="XML" Click="XMLSerialization_Click"/>
+            <Button x:Name="JSONSerialization" Content="JSON" Click="JSONSerialization_Click"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Source={}, Path=_data}"/>
+        </StackPanel>
+    </Grid>
+</Window>
