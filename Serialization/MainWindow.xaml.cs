@@ -37,10 +37,12 @@ namespace Serialization
                     {
                         if (string.IsNullOrEmpty(line)) continue;
 
-                        string name = Regex.Match(line, "(Имя - )[А-я]+").Value.Replace("Имя - ", "");
-                        string login = Regex.Match(line, "(login - )[A-zА-я]*").Value.Replace("login - ", "");
-                        string password = Regex.Match(line, "(\\s\\s)\\w*").Value.Trim();
-                        string salt = Regex.Match(line, "\\d+").Value;
+                        var regex = Regex.Match(line, "Имя.- (?<name>\\S+), login - (?<login>\\S+), password -  (?<password>\\S+), Соль - (?<salt>\\d+)");
+
+                        string name = regex.Groups["name"].Value;
+                        string login = regex.Groups["login"].Value;
+                        string password = regex.Groups["password"].Value;
+                        string salt = regex.Groups["salt"].Value;
 
                         currentApp.AddUser(new User(name, login, password, salt));
                     }
