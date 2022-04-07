@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -12,7 +7,7 @@ using System.Text.Encodings.Web;
 
 namespace Serialization
 {
-    internal class DataSerializer
+    static class DataSerializer
     {
         private static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions()
         {
@@ -22,7 +17,7 @@ namespace Serialization
             WriteIndented = true
         };
 
-        public void BinarySerialize(object data, string filePath)
+        public static void BinarySerialize(object data, string filePath)
         {
             BinaryFormatter bf = new();
             if (File.Exists(filePath)) File.Delete(filePath);
@@ -33,9 +28,9 @@ namespace Serialization
             }
         }
 
-        public void XmlSerialize(Type dataType, object data, string filePath)
+        public static void XmlSerialize(object data, string filePath)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(dataType);
+            XmlSerializer xmlSerializer = new XmlSerializer(data.GetType());
             if (File.Exists(filePath)) File.Delete(filePath);
 
             TextWriter writer = new StreamWriter(filePath);
@@ -43,7 +38,7 @@ namespace Serialization
             writer.Close();
         }
 
-        public void JsonSerialize(Type dataType, object data, string filePath)
+        public static void JsonSerialize(object data, string filePath)
         {
             if (File.Exists(filePath)) File.Delete(filePath);
 

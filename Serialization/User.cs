@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 namespace Serialization
@@ -27,7 +24,7 @@ namespace Serialization
             Salt = salt;
         }
 
-        public User() { }
+        private User() { }
 
         public override string ToString()
         {
