@@ -17,34 +17,60 @@ namespace Serialization
             WriteIndented = true
         };
 
-        public static void BinarySerialize(object data, string filePath)
+        public static bool BinarySerialize(object data, string filePath)
         {
             BinaryFormatter bf = new();
             if (File.Exists(filePath)) File.Delete(filePath);
 
             using (FileStream fs = File.Create(filePath))
             {
-                bf.Serialize(fs, data);
+                try
+                {
+                    bf.Serialize(fs, data);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
-        public static void XmlSerialize(object data, string filePath)
+        public static bool XmlSerialize(object data, string filePath)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(data.GetType());
-            if (File.Exists(filePath)) File.Delete(filePath);
+            try
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(data.GetType());
+                if (File.Exists(filePath)) File.Delete(filePath);
 
-            TextWriter writer = new StreamWriter(filePath);
-            xmlSerializer.Serialize(writer, data);
-            writer.Close();
+                TextWriter writer = new StreamWriter(filePath);
+                xmlSerializer.Serialize(writer, data);
+                writer.Close();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public static void JsonSerialize(object data, string filePath)
+        public static bool JsonSerialize(object data, string filePath)
         {
-            if (File.Exists(filePath)) File.Delete(filePath);
+            try
+            {
+                if (File.Exists(filePath)) File.Delete(filePath);
 
-            TextWriter writer = new StreamWriter(filePath);
-            writer.Write(JsonSerializer.Serialize(data, jsonOptions));
-            writer.Close();
+                TextWriter writer = new StreamWriter(filePath);
+                writer.Write(JsonSerializer.Serialize(data, jsonOptions));
+                writer.Close();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

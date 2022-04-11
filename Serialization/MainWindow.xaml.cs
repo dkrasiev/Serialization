@@ -17,15 +17,17 @@ namespace Serialization
         public MainWindow()
         {
             InitializeComponent();
+            SerializationButtons.IsEnabled = false;
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new();
+            ofd.Filter = "TXT file (*.txt) | *.txt";
 
             if (ofd.ShowDialog() == true)
             {
-                LoadedFile.Text = ofd.FileName;
+                LoadedFile.Content = ofd.FileName;
 
                 using (FileStream fs = new(ofd.FileName, FileMode.Open, FileAccess.Read))
                 {
@@ -37,7 +39,7 @@ namespace Serialization
                     {
                         if (string.IsNullOrEmpty(line)) continue;
 
-                        var regex = Regex.Match(line, "Имя.- (?<name>\\S+), login - (?<login>\\S+), password -  (?<password>\\S+), Соль - (?<salt>\\d+)");
+                        var regex = Regex.Match(line, "Имя.- (?<name>\\S+), login - (?<login>\\S+), password -  (?<password>\\S+), Соль - (?<salt>\\S+)");
 
                         string name = regex.Groups["name"].Value;
                         string login = regex.Groups["login"].Value;
@@ -48,6 +50,7 @@ namespace Serialization
                     }
                 }
 
+                SerializationButtons.IsEnabled = true;
                 ShowSucces();
             }
             else
@@ -68,12 +71,15 @@ namespace Serialization
             SaveFileDialog ofd = new()
             {
                 FileName = "result",
-                Filter = "BIN file (*.bin)|.bin"
+                Filter = "BIN file (*.bin) | *.bin"
             };
 
             if (ofd.ShowDialog() == true)
             {
-                DataSerializer.BinarySerialize(users, ofd.FileName);
+                if (DataSerializer.BinarySerialize(users, ofd.FileName))
+                {
+                    ShowSucces();
+                }
             }
         }
 
@@ -88,13 +94,16 @@ namespace Serialization
 
             SaveFileDialog ofd = new()
             {
-                FileName= "result",
-                Filter = "XML file (*.xml)|.xml"
+                FileName = "result",
+                Filter = "XML file (*.xml) | *.xml"
             };
 
             if (ofd.ShowDialog() == true)
             {
-                DataSerializer.XmlSerialize(users, ofd.FileName);
+                if (DataSerializer.XmlSerialize(users, ofd.FileName))
+                {
+                    ShowSucces();
+                }
             }
         }
 
@@ -110,12 +119,15 @@ namespace Serialization
             SaveFileDialog ofd = new()
             {
                 FileName = "result",
-                Filter = "JSON file (*.json)|.json"
+                Filter = "JSON file (*.json) | *.json"
             };
 
             if (ofd.ShowDialog() == true)
             {
-                DataSerializer.JsonSerialize(users, ofd.FileName);
+                if (DataSerializer.JsonSerialize(users, ofd.FileName))
+                {
+                    ShowSucces();
+                }
             }
         }
 

@@ -7,13 +7,17 @@
         mc:Ignorable="d"
         Title="Serialization" Height="450" Width="800">
     <Grid>
-        <StackPanel x:Name="Buttons">
-            <Button x:Name="LoadButton" Content="Load" Click="Load_Click"/>
-            <Button x:Name="BinarySerialization" Content="Binary" Click="BinarySerialization_Click"/>
-            <Button x:Name="XMLSerialization" Content="XML" Click="XMLSerialization_Click"/>
-            <Button x:Name="JSONSerialization" Content="JSON" Click="JSONSerialization_Click"/>
-            <TextBlock TextWrapping="Wrap" Text="Loaded file" x:Name="LoadedFile"/>
-            <TextBlock TextWrapping="Wrap" Text="Loaded data" x:Name="LoadedData"/>
+        <StackPanel x:Name="Buttons" Margin="15px" >
+            <StackPanel Orientation="Vertical">
+                <Label x:Name="LoadedFile" HorizontalAlignment="Center" Content="Файл не загружен"></Label>
+                <Button x:Name="LoadButton" Content="Load file" Click="Load_Click"/>
+            </StackPanel>
+            
+            <StackPanel x:Name="SerializationButtons" Margin="0 15px">
+                <Button x:Name="BinarySerialization" Content="Binary" Click="BinarySerialization_Click"/>
+                <Button x:Name="XMLSerialization" Content="XML" Click="XMLSerialization_Click"/>
+                <Button x:Name="JSONSerialization" Content="JSON" Click="JSONSerialization_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
