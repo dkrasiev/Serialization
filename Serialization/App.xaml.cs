@@ -8,21 +8,21 @@ namespace Serialization
     /// </summary>
     public partial class App : Application
     {
-        private List<User> users = new List<User>();
+        private List<Movie> data = new List<Movie>();
 
-        public void AddUser(User user)
+        public void AddData(Movie user)
         {
-            users.Add(user);
+            data.Add(user);
         }
 
-        public List<User> GetUsers()
+        public List<Movie> GetData()
         {
-            return new List<User>(users);
+            return new List<Movie>(data);
         }
 
-        public void ClearUsers()
+        public void ClearData()
         {
-            users.Clear();
+            data.Clear();
         }
     }
 }

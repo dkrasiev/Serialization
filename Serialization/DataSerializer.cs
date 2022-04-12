@@ -19,7 +19,7 @@ namespace Serialization
 
         public static bool BinarySerialize(object data, string filePath)
         {
-            BinaryFormatter bf = new();
+            BinaryFormatter bf = new BinaryFormatter();
             if (File.Exists(filePath)) File.Delete(filePath);
 
             using (FileStream fs = File.Create(filePath))

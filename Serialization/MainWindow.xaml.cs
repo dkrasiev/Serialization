@@ -22,31 +22,41 @@ namespace Serialization
 
         private void Load_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new();
+            OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "TXT file (*.txt) | *.txt";
 
             if (ofd.ShowDialog() == true)
             {
                 LoadedFile.Content = ofd.FileName;
 
-                using (FileStream fs = new(ofd.FileName, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
                 {
-                    StreamReader sr = new(fs);
+                    StreamReader sr = new StreamReader(fs);
                     string[] lines = sr.ReadToEnd().Split('\n');
-                    currentApp.ClearUsers();
+                    currentApp.ClearData();
 
                     foreach (string line in lines)
                     {
                         if (string.IsNullOrEmpty(line)) continue;
 
-                        var regex = Regex.Match(line, "Имя.- (?<name>\\S+), login - (?<login>\\S+), password -  (?<password>\\S+), Соль - (?<salt>\\S+)");
+                        var regex = new Regex("(?<name>.+)\\*\\*(?<price>.+)\\*\\*(?<movieName>.+)\\*\\*(?<description>.+)\\*\\*(?<director>.+)\\*\\*(?<date>.+)\\*\\*(?<something>.+)");
 
-                        string name = regex.Groups["name"].Value;
-                        string login = regex.Groups["login"].Value;
-                        string password = regex.Groups["password"].Value;
-                        string salt = regex.Groups["salt"].Value;
+                        Match match = regex.Match(line);
 
-                        currentApp.AddUser(new User(name, login, password, salt));
+                        if (match.Success)
+                        {
+                            string name = match.Groups["name"].Value;
+                            int price = Int32.Parse(match.Groups["price"].Value);
+                            string movieName = match.Groups["movieName"].Value;
+                            string description = match.Groups["description"].Value;
+                            string director = match.Groups["director"].Value;
+                            DateTime date = DateTime.Parse(match.Groups["date"].Value);
+                            Movie movie = new Movie(name, price, movieName, description, director, date);
+
+                            currentApp.AddData(movie);
+                        }
+
+                        //currentApp.AddUser(new Movie(name, login, password, salt));
                     }
                 }
 
@@ -61,14 +71,14 @@ namespace Serialization
 
         private void BinarySerialization_Click(object sender, RoutedEventArgs e)
         {
-            List<User> users = currentApp.GetUsers();
+            List<Movie> users = currentApp.GetData();
             if (users.Count == 0)
             {
                 ShowError();
                 return;
             }
 
-            SaveFileDialog ofd = new()
+            SaveFileDialog ofd = new SaveFileDialog()
             {
                 FileName = "result",
                 Filter = "BIN file (*.bin) | *.bin"
@@ -85,14 +95,14 @@ namespace Serialization
 
         private void XMLSerialization_Click(object sender, RoutedEventArgs e)
         {
-            List<User> users = currentApp.GetUsers();
+            List<Movie> users = currentApp.GetData();
             if (users.Count == 0)
             {
                 ShowError();
                 return;
             }
 
-            SaveFileDialog ofd = new()
+            SaveFileDialog ofd = new SaveFileDialog()
             {
                 FileName = "result",
                 Filter = "XML file (*.xml) | *.xml"
@@ -109,14 +119,14 @@ namespace Serialization
 
         private void JSONSerialization_Click(object sender, RoutedEventArgs e)
         {
-            List<User> users = currentApp.GetUsers();
+            List<Movie> users = currentApp.GetData();
             if (users.Count == 0)
             {
                 ShowError();
                 return;
             }
 
-            SaveFileDialog ofd = new()
+            SaveFileDialog ofd = new SaveFileDialog()
             {
                 FileName = "result",
                 Filter = "JSON file (*.json) | *.json"
